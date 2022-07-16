@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Profile;
 use Intervention\Image\Facades\Image;
 
 class ProfilesController extends Controller
@@ -14,7 +15,12 @@ class ProfilesController extends Controller
 
     public function index(\App\Models\User $user)
     {
-      return view('profiles.index', compact('user') );
+      $follows= (auth()->user()) ? auth()->user()->following->contains($user->id) : false;
+      
+      
+
+
+      return view('profiles.index', compact('user', 'follows') );
     }
 
     public function edit(\App\Models\User $user){
@@ -47,4 +53,15 @@ class ProfilesController extends Controller
       return redirect("/profile/{$user -> id}");
     }
 
+
+    public function search(){
+      $search = $_GET['search'];
+      $user = User::where('username', 'LIKE', '%'.$search.'%')->get();
+      if (isset($user[0])) {
+        $profile=$user[0]->profile->id;
+        return redirect("/profile/{$profile}");
+      } else { 
+        return redirect("/");
+    }
+  }
 }

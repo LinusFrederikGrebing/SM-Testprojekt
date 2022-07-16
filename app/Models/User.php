@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'username',
         'password',
+        'image',
     ];
 
     /**
@@ -43,13 +44,31 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    protected static function boot(){
+        parent::boot();
+        static::created(function ($user) {
+            $user->profile()->create(['title'=>$user->username,]);
+        });
 
-    public function profile(){
-        return $this->hasOne(profile::class);
     }
 
     public function posts(){
-        return $this->hasMany(post::class);
+        return $this->hasMany(Post::class)->orderBy('created_at', 'DESC');
     }
 
+    public function profile(){
+        return $this->hasOne(Profile::class);
+    }
+
+
+    public function following()
+    {
+
+        
+        return $this->belongsToMany(profile::class);
+    }
+
+
 }
+
+?>

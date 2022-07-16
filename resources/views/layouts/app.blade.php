@@ -35,7 +35,18 @@
                     <ul class="navbar-nav me-auto">
 
                     </ul>
-
+                    <div class="px-5">
+                         <form type="get" action="{{ url('/search')}}">
+                                  <input
+                                   placeholder=" Search Profile"
+                                   name="search"
+                                   >
+                         <button class="">
+                             Search Profile
+                        </button>
+                        </form>
+                    </div>
+                    </div>
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->

@@ -4,17 +4,18 @@
 <div class="container">
    <div class="row pt-3 pb-5 align-items-center">
         <div class="col-3">
-            <img class="w-100 h-auto rounded-circle my-auto" src="https://kartolomio.de/wp-content/uploads/2021/08/GOL-EG-12-1837.jpg" alt="">
+            <img class="w-100 h-auto rounded-circle my-auto" src="{{ $user -> profile -> profileImage()}}" alt="">
         </div>
-        <div class="col-9 p-5">
-            <div class="d-flex justify-content-between">
+        <div class="col-7 pt-5 px-5">
+            <div class="d-flex align-items-center pb-2">
                 <h1>{{ $user -> username }}</h1>
-                <button class="px-4 border-0 align-items-baseline">Neuen Post hinzufügen</button>
+
+                <follow-button user-id="{{ $user -> id}}" follows="{{ $follows }}"></follow-button>
             </div>
             <div class="d-flex">
-                <div class="px-2"><strong>155</strong> posts</div>
-                <div class="px-2"><strong>255</strong> followers</div>
-                <div class="px-2"><strong>355</strong> following</div>
+                <div class="px-2"><strong>{{ $user->posts->count()}}</strong> posts</div>
+                <div class="px-2"><strong>{{ $user->profile->followers->count()}}</strong> followers</div>
+                <div class="px-2"><strong>{{ $user->following->count()}}</strong> following</div>
             </div>
             <div class="py-4">
                 <strong>{{ $user->profile->title}}</strong>
@@ -24,17 +25,30 @@
 
            
         </div>
+    @can('update', $user->profile)
+        <div class="col-2">
+        <a href="/post/create"><button class="px-4 py-2 border-0"><strong class="display-5">+</strong></button></a>
+        </div>
     </div>
+    @endcan
+    @can('update', $user->profile)
+         <div class="row pb-5">
+            <div class="col-12">
+                         <a href="/profile/{{ $user->id }}/edit" class=""><button class="px-4 py-2 border-0 w-100 ">Edit profile</button></a>
+            </div>
+           
+        </div>  
+     @endcan
     <div class="row">
-        <div class="col-4">
-            <img class="w-100 h-100" src="https://wallpaperaccess.com/full/2029165.jpg" alt="">
+        
+       @foreach( $user->posts as $post )
+
+       <div class="col-4 pb-4"> 
+            <a href="/post/{{ $post->id }}">
+                <img src= "/storage/{{ $post->image }}" class="w-100">
+             </a>
         </div>
-        <div class="col-4">
-        <img class="w-100 h-100" src="https://wallpaperaccess.com/full/2029165.jpg" alt="">
-        </div>
-        <div class="col-4">
-        <img class="w-100 h-100" src="https://wallpaperaccess.com/full/2029165.jpg" alt="">
-        </div>
+       @endforeach
     </div>
 </div>
 @endsection
